@@ -9,9 +9,17 @@ import {
     Text,
     Anchor,
     rem,
+    Alert,
+    Notification,
+    Loader,
   } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { SingupApi } from './Api';
+import { IconAlertCircle, IconX } from '@tabler/icons-react';
+import { AuthContext } from '../AuthContext';
   
+import { notifications } from '@mantine/notifications';
   const useStyles = createStyles((theme) => ({
     wrapper: {
       minHeight: '80vh',
@@ -40,18 +48,51 @@ import { Link } from 'react-router-dom';
   }));
   
   export function Singup() {
+    const [state, setstate] = useState({})
     const { classes } = useStyles();
+    const [loader, setloader] = useState(false);
+    const {login} = useContext(AuthContext)
+    const Navigate=useNavigate();
+  const [alertVisible, setAlertVisible] = useState(false);
+    const handlechange =(e)=>{
+      setstate({...state,[e.target.name]:e.target.value})
+    }
+    const senddata = (e)=>{
+      setloader(true)
+      SingupApi(state).then((res)=>{
+        notifications.show({
+          title: 'Singup Done',
+          message: 'Hey , Pleace Login your accout created sussfuly🤥',
+        })
+        setloader(false)
+        Navigate('/login')
+      }).catch((err)=>{
+        console.log(err)
+        notifications.show({
+          title: 'Opps!',
+          message: `Try Again With diffrent Mail`,
+        })
+        setloader(false)
+      })
+        setTimeout(() => {
+          setAlertVisible(false);
+          setloader(false)
+        }, 2000);   
+    }
     return (
       <div className={classes.wrapper}>
+        {/* <!-- Sign up --> */}
+        {loader&&(
+          <Loader pos={'absolute'} top={'50%'} left={'50%'} color="red" variant="bars" />
+        )}
         <Paper className={classes.form} radius={0} p={30}>
           <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
             Welcome back to ATTRYB!
           </Title>
-          <TextInput label="Name" placeholder="Name" size="md" />
-          <TextInput label="Email address" type='email' placeholder="hello@gmail.com" size="md" />
-          <PasswordInput label="Password" placeholder="Your password" mt="md" size="md" />
-          <Checkbox label="Keep me logged in" mt="xl" size="md" />
-          <Button color='green' fullWidth mt="xl" size="md">
+          <TextInput label="Name" name='name' onChange={(e)=>{handlechange(e)}} placeholder="Name" size="md" />
+          <TextInput label="Email address" name='email' onChange={(e)=>{handlechange(e)}} type='email' placeholder="hello@gmail.com" size="md" />
+          <PasswordInput label="Password" name='password' onChange={(e)=>{handlechange(e)}} placeholder="Your password" mt="md" size="md" />
+          <Button color='green' onClick={()=>{senddata()}} fullWidth mt="xl" size="md">
             Singup
           </Button>
   

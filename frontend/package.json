@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.11.2",
     "@emotion/react": "^11.11.1",
     "@mantine/carousel": "^6.0.19",
     "@mantine/core": "^6.0.19",
@@ -24,6 +26,7 @@
     "@tiptap/extension-link": "^2.1.6",
     "@tiptap/react": "^2.1.6",
     "@tiptap/starter-kit": "^2.1.6",
+    "axios": "^1.4.0",
     "dayjs": "^1.11.9",
     "embla-carousel-react": "^7.1.0",
     "react": "^18.2.0",

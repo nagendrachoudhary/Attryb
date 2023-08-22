@@ -1,8 +1,10 @@
-import { createStyles, Header, Autocomplete, Group, Burger, rem, Input, Button } from '@mantine/core';
+import { createStyles, Header, Autocomplete, Group, Burger, rem, Input, Button, TextInput, ActionIcon, useMantineTheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconCar, IconCardboards, IconSearch } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight, IconCar, IconCardboards, IconLogout, IconSearch } from '@tabler/icons-react';
 import { MantineLogo } from '@mantine/ds';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../AuthContext';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -45,13 +47,16 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 export function Navbar() {
+  const theme = useMantineTheme();
+  const{user,logout}=useContext(AuthContext)
+  console.log(user);
   const [opened, { toggle }] = useDisclosure(false);
   const { classes } = useStyles();
- const links  =[{label:"CARS",link:"car"}]
+ const links  =[{label:"CARS",link:"/"},{label:"add",link:"/addcar"}]
   const items = links.map((link) => (
     <Link
       key={link.label}
-      to={'/'}
+      to={link.link}
       className={classes.link}
     >
       {link.label}
@@ -70,16 +75,32 @@ export function Navbar() {
           <Group ml={50} spacing={5} className={classes.links}>
             {items}
           </Group>
-          <Input
-            className={classes.search}
-            placeholder="Search"
-            icon={<IconSearch size="1rem" stroke={1.5} />}
-          />
-          <Button>
+          <TextInput
+      icon={<IconSearch size="1.1rem" stroke={1.5} />}
+      radius="xl"
+      size="md"
+      rightSection={
+        <ActionIcon size={32} color='red' radius="xl" variant="filled">
+          {theme.dir === 'ltr' ? (
+            <IconArrowRight  size="1.1rem" stroke={1.5} />
+          ) : (
+            <IconArrowLeft  size="1.1rem" stroke={1.5} />
+          )}
+        </ActionIcon>
+      }
+      placeholder="Search questions"
+      rightSectionWidth={42}
+      // {...props}
+    />
+          {user?<Button variant='filled' color='red' onClick={()=>{logout()}}>
+            <IconLogout/>
+                {user.name}
+          </Button>:
+          <Button variant='filled' color='cyan'>
             <Link to={'/Login'}>
                 Login
             </Link>
-          </Button>
+          </Button>}
         </Group>
       </div>
     </Header>

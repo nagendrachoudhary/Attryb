@@ -10,9 +10,12 @@ import {
   Anchor,
   rem,
   Box,
+  Loader,
 } from "@mantine/core";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { LoginApi} from "./Api";
+import { AuthContext } from "../AuthContext";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -45,13 +48,28 @@ const useStyles = createStyles((theme) => ({
 export function Login() {
   const { classes } = useStyles();
   const [state,setstate] = useState({});
+  const [loader, setloader] = useState(false);
+  const {login}=useContext(AuthContext)
   const handlechange =(e)=>{
          setstate({...state,[e.target.name]:e.target.value})
   }
-  console.log(state);
+  const senddata =()=>{
+    setloader(true)
+    if(state?.email&&state?.password){
+      setTimeout(() => {
+        
+        login(state)
+      }, 5000);
+  }
+  setTimeout(() => {
+    setloader(false)
+    }, 5000);
+  }
   return (
+
     <Box mah={'80vh'} >
       <Box className={classes.wrapper}>
+      {loader&&(<Loader pos={'absolute'} top={'50%'} left={'50%'} color="red" variant="bars" />)}
         <Paper className={classes.form} radius={0} p={30}>
           <Title
             order={2}
@@ -78,7 +96,7 @@ export function Login() {
             onChange={(e)=>{handlechange(e)}}
           />
           <Checkbox label="Keep me logged in" mt="xl" size="md" />
-          <Button color='red' fullWidth mt="xl" size="md">
+          <Button onClick={()=>{senddata()}} color='red' fullWidth mt="xl" size="md">
             Login
           </Button>
 

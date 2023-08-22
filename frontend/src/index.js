@@ -5,8 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { MantineProvider } from '@mantine/core';
 import { BrowserRouter } from "react-router-dom";
+import { AuthContextProvider } from './AuthContext';
+import { Notifications } from '@mantine/notifications';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <AuthContextProvider>
   <BrowserRouter>
     <MantineProvider
       withGlobalStyles
@@ -33,9 +36,12 @@ root.render(
         },
       }}
     >
+      <Notifications position='top-center' zIndex={2077}/>
       <App />
     </MantineProvider>
   </BrowserRouter>
+  </AuthContextProvider>
+
 );
 
 // If you want to start measuring performance in your app, pass a function
