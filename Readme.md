@@ -19,12 +19,12 @@ This is a second-hand car selling website where users can list their cars for sa
 - Backend: [Node.js](https://nodejs.org/), [Express.js](https://expressjs.com/)
 - Database: [MongoDB](https://www.mongodb.com/)
 - Authentication: Token-based authentication
-- Styling: [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
-- Hosting: [Deployed on Heroku](https://www.heroku.com/)
+- Styling: [CSS](https://ui.mantine.dev/)
+- Hosting: [Deployed on Netlify](https://www.heroku.com/)
 
 ## Installation
 
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
+   git clone https://github.com/nagendrachoudhary/Attryb.git
