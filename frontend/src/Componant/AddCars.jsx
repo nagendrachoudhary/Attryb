@@ -6,6 +6,7 @@ import {
   FileInput,
   Input,
   LoadingOverlay,
+  Textarea,
 } from "@mantine/core";
 import React, { useState } from "react";
 import { notifications } from "@mantine/notifications";
@@ -14,49 +15,43 @@ import axios from "axios";
 export default function AddCars() {
   const [loader, setloader] = useState(false);
   const [CarData, setCarData] = useState({});
-  let formData = new FormData();
+  const [Filedata, setFiledata] = useState('');
+  
   const handlechange = (e) => {
     setCarData({ ...CarData, [e.target.name]: e.target.value });
   };
   const senddata = async (e) => {
-    let inputs = document.querySelectorAll('input');
-    inputs.forEach(function(input) {
-        input.value = "";
-    });
     setloader(true)
-    
-    await axios
-      .post("http://localhost:8080/uploadimg", formData)
+    let formData = new FormData();
+    formData.append('file',Filedata)
+    await axios.post("http://localhost:8080/uploadimg", formData)
       .then((res) => {
-        setCarData({ ...CarData, image: res.data });
-        Addcar(CarData)
+        let data={...CarData, image: res.data}
+        Addcar(data)
           .then((res) => {
             setloader(false)
            
             notifications.show({
-              title: "Sussfully add Car",
-              message: "Hey , Pleace Login your accout created sussfuly🤥",
+              title: "Car Successfully Added",
+              
               style: { color: "red" },
             });
           })
           .catch((err) => {
             setloader(false)
             notifications.show({
-              title: "Try Again data",
+              title: "Try Again",
             });
           });
       })
       .catch((err) => {
         setloader(false)
         notifications.show({
-          title: "Check onces and try again",
+          title: "Try again",
         });
       });
   };
-  const handleUpload = (e) => {
-    e.preventdefault()
-    formData.append("file", e);
-  };
+  
   return (
     <Box m={"auto"} w={["100%", "50%", "25%"]}>
       <LoadingOverlay
@@ -128,11 +123,25 @@ export default function AddCars() {
             id="color"
             placeholder="Red"
           /></Input.Wrapper>
+          <Input.Wrapper
+            id='description'
+            label='description'
+            required
+            maw={320}
+            mx="auto">
+         </Input.Wrapper> <textarea
+           style={{maxWidth:'100%',width:'100%',height:'100px'}}
+            name="description"
+            onChange={(e) => {
+              handlechange(e);
+            }}
+            placeholder="description"
+          />
           <FileInput
             required
             accept="image/png,image/jpeg"
             onChange={(e) => {
-              handleUpload(e);
+              setFiledata(e)
             }}
             label="Upload files"
             placeholder="Upload files"

@@ -9,6 +9,8 @@ import AddCars from './Componant/AddCars';
 import { useContext, useState } from 'react';
 import { AuthContext } from './AuthContext';
 import { Box, Loader } from '@mantine/core';
+import { FooterLinks } from './Componant/Footer';
+import { NotFoundImage } from './Componant/Notfound';
 
 function App() {
   const {user}= useContext(AuthContext)
@@ -25,7 +27,9 @@ function App() {
       <Route path='/login' element={<Login/>}/>
       <Route path='/Register' element ={<Singup/>}/>
       <Route path='/addcar' element={user?<AddCars/>:<Login/>}/>
+      <Route path='*' element ={<NotFoundImage/>}/>
     </Routes>}
+    <FooterLinks/>
     </Box>
   );
 }

@@ -7,6 +7,8 @@ const auth = require('../Middlewar/Auth');
 const cloudinary = require('../db/cloudinary')
 const uploader = require("../db/multer");
 const cardata = require('../Modle/Cars.moudle');
+const fs = require('fs');
+const path = require('path');
 // routes
 router.post('/login', async (req, res) => {
     try {
@@ -79,7 +81,20 @@ router.post('/singup', async (req, res) => {
 })
 router.post('/uploadimg', auth,uploader.single("file"), async (req, res) => {
     try {
-        const upload = await cloudinary.v2.uploader.upload(req.file.path);
+         const upload = await cloudinary.v2.uploader.upload(req.file.path);
+        //delete the file from local storage after uploading to cloundinary
+        console.log(req.file.path)
+        const filename = path.join(__dirname, 'download.jpeg');
+
+        // Use fs.unlink to delete the file
+        fs.unlink(filename, (err) => {
+          if (err) {
+            console.error(`Error deleting file: ${err.message}`);
+          } else {
+            console.log(`File ${filename} deleted successfully.`);
+          }
+        });
+        console.log(upload);
         res.send(upload.secure_url)
     } catch (error) {
         res.status(400).send(error);
@@ -94,5 +109,56 @@ router.post('/addcar', auth, async (req, res) => {
     } catch (error) {
         res.status(400).send(error);
     }
+})
+router.get("/allcars",async function (req, res){
+    /* const cars = await cardata.findAll();*/
+    try{
+        const query = req.query;
+        let cars = await cardata.find();
+        
+        if (query.price !== 'All') {
+          if (query.price === 'hightolow') {
+            cars.sort((a, b) => {
+              return Number(b.price) - Number(a.price);
+            });
+          } else {
+            cars.sort((a, b) => {
+              return Number(a.price) - Number(b.price);
+            });
+          }
+        }
+        if (query.mileage !== 'All') {
+          cars=cars.filter((el,i)=>{
+            console.log(cars);
+            return( Number(el.mileage)>=Number(query.mileage.low)&&Number(el.mileage)<=Number(query.mileage.high))
+           })
+          }
+          if (query.color !== 'All') {
+           cars=cars.filter((el,i)=>{
+            return el.color.trim().toLowerCase().replace(/\s+/g, "")==query.color.trim().toLowerCase().replace(/\s+/g, "")
+           })
+          }
+        
+        // Send the sorted or unsorted data
+        res.send(cars);
+    }catch{
+        return res.json({"message":"No Cars Found"})
+    }
+       
+})
+router.delete("/delete/:id",auth,async function (req, res){
+    try{
+        const {id} = req.params;
+        const cars = await cardata.findByIdAndDelete(id)
+        res.send('delete')
+    }catch{
+        return res.json({"message":"No Cars Found"})
+    }
+       
+})
+router.patch("/update/:id",auth,async(req,res)=>{
+    const {id}= req.params
+    await cardata.findByIdAndUpdate(id,{...req.body})
+    res.send("done")
 })
 module.exports = router

@@ -6,7 +6,8 @@ const Car = new Schema({
     mileage: { type: Number, required: true },
     image: { type: String, required: true },
     color: { type: String, required: true },
-    user: { type: String, required: true }
+    user: { type: String, required: true },
+    description:{ type: String, required: true }
 }, {
     timestamps: true
 })

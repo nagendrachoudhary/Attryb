@@ -67,7 +67,6 @@ export function Navbar() {
     <Header height={56} className={classes.header} pos={'sticky'} top={0} >
       <div className={classes.inner}>
         <Group>
-          <Burger opened={opened} onClick={toggle} size="sm" />
           <IconCardboards size={28} />
         </Group>
 
@@ -75,7 +74,7 @@ export function Navbar() {
           <Group ml={50} spacing={5} className={classes.links}>
             {items}
           </Group>
-          <TextInput
+          {/* <TextInput
       icon={<IconSearch size="1.1rem" stroke={1.5} />}
       radius="xl"
       size="md"
@@ -91,7 +90,7 @@ export function Navbar() {
       placeholder="Search questions"
       rightSectionWidth={42}
       // {...props}
-    />
+    /> */}
           {user?<Button variant='filled' color='red' onClick={()=>{logout()}}>
             <IconLogout/>
                 {user.name}
