@@ -21,7 +21,7 @@ Welcome to our Second-Hand Car Marketplace, where users can buy and sell used ca
 
 - **Image Upload**: Users can upload car images, which are stored in the cloud using Cloudinary.
 
-![Image Upload](https://res.cloudinary.com/dwijfxapd/image/upload/v1692799489/Screenshot_2023-08-23_193421_szzgjs.png)
+![Image Upload](https://res.cloudinary.com/dwijfxapd/image/upload/v1692799807/Screenshot_2023-08-23_193601_wmz8dr.png)
 
 ## Live Demo
 
