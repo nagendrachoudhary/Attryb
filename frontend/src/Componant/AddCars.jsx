@@ -24,7 +24,7 @@ export default function AddCars() {
     setloader(true)
     let formData = new FormData();
     formData.append('file',Filedata)
-    await axios.post("http://localhost:8080/uploadimg", formData)
+    await axios.post("https://narenchoudhary.onrender.com/uploadimg", formData)
       .then((res) => {
         let data={...CarData, image: res.data}
         Addcar(data)
