@@ -9,6 +9,7 @@ const uploader = require("../db/multer");
 const cardata = require('../Modle/Cars.moudle');
 const fs = require('fs');
 const path = require('path');
+const messages = require('../Modle/message.moudle');
 // routes
 router.post('/login', async (req, res) => {
     try {
@@ -160,5 +161,14 @@ router.patch("/update/:id",auth,async(req,res)=>{
     const {id}= req.params
     await cardata.findByIdAndUpdate(id,{...req.body})
     res.send("done")
+})
+router.post("/sendmessage",async(req,res)=>{
+    try{
+        console.log(req.body)
+        messages.create({...req.body})
+        res.send("ok")
+    }catch{
+        return  res.status(401).send("Error")
+    }
 })
 module.exports = router
